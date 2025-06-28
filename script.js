@@ -1,4 +1,4 @@
-// public/script.js
+// script.js
 // Подключение к FastAPI и отображение стихов
 
 const API_BASE = "https://biblebot-api.onrender.com";

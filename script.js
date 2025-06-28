@@ -17,6 +17,10 @@ fetch(`${API_BASE}/books`)
       option.textContent = book;
       bookSelect.appendChild(option);
     });
+    console.log("📚 Загружены книги:", books);
+  })
+  .catch((err) => {
+    console.error("Ошибка загрузки книг:", err);
   });
 
 // При выборе книги — получить главы
@@ -36,6 +40,10 @@ bookSelect.addEventListener("change", () => {
         chapterSelect.appendChild(option);
       });
       chapterSelect.disabled = false;
+      console.log(`📖 Главы книги ${book}:`, chapters);
+    })
+    .catch((err) => {
+      console.error("Ошибка загрузки глав:", err);
     });
 });
 
@@ -52,5 +60,9 @@ chapterSelect.addEventListener("change", () => {
         <p><strong>${v.verse}</strong> ${v.text}</p>
       `).join("");
       versesContainer.innerHTML = versesHtml;
+      console.log(`✅ Показана глава ${chapter} книги ${book}`);
+    })
+    .catch((err) => {
+      console.error("Ошибка загрузки главы:", err);
     });
 });

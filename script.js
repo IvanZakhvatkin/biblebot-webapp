@@ -3,9 +3,9 @@
 
 const API_BASE = "https://biblebot-api.onrender.com";
 
-const bookSelect = document.getElementById("bookSelect");
-const chapterSelect = document.getElementById("chapterSelect");
-const versesContainer = document.getElementById("verses");
+const bookSelect = document.getElementById("book");
+const chapterSelect = document.getElementById("chapter");
+const versesContainer = document.getElementById("text");
 
 // Получить список книг
 fetch(`${API_BASE}/books`)

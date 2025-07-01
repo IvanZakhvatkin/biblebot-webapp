@@ -1,1 +1,61 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Библия</title><link rel='stylesheet' href='style.css'></head><body><h1>📖 Чтение Библии</h1><select id='book'></select><select id='chapter'></select><div id='text'></div><script src='script.js'></script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Библия онлайн</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>📖 Чтение Библии</h1>
+  <div id="text" style="margin-top:2em;"></div>
+  <script>
+    // ---- Настройки ----
+    const API_BASE = "http://147.45.163.133:8000";
+
+    // ---- Получаем параметры из URL ----
+    function getUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        book: params.get("book"),
+        chapter: params.get("chapter")
+      };
+    }
+
+    // ---- Показать главу ----
+    function showChapter(book, chapter) {
+      const textDiv = document.getElementById("text");
+      textDiv.innerHTML = "Загрузка...";
+      fetch(`${API_BASE}/bible?book=${encodeURIComponent(book)}&chapter=${encodeURIComponent(chapter)}`)
+        .then((res) => {
+          if (!res.ok) throw new Error("Глава не найдена");
+          return res.json();
+        })
+        .then((data) => {
+          if (!data.verses || !data.verses.length) {
+            textDiv.innerHTML = "Нет текста для этой главы";
+            return;
+          }
+          // Заголовок главы
+          let html = `<h2>${data.book}, ${data.chapter}</h2>`;
+          html += data.verses.map(
+            (v) => `<p><strong>${v.verse}</strong> ${v.text}</p>`
+          ).join("");
+          textDiv.innerHTML = html;
+        })
+        .catch((err) => {
+          textDiv.innerHTML = "Ошибка загрузки главы";
+        });
+    }
+
+    // ---- Запуск ----
+    window.onload = function() {
+      const { book, chapter } = getUrlParams();
+      if (book && chapter) {
+        showChapter(book, chapter.startsWith("Глава ") ? chapter : "Глава " + chapter);
+      } else {
+        document.getElementById("text").innerHTML = "Для просмотра главы откройте ссылку из бота.";
+      }
+    };
+  </script>
+</body>
+</html>
